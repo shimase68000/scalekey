@@ -171,6 +171,32 @@ scalekey does not share state with the editor's internal data structures.\
 The TRAP #7 interface is the boundary.\
 What happens on each side of it is independent.
 
+### OPM Register Responsibility
+
+The division of responsibility extends to the OPM hardware itself.
+
+OPM Tone Editor and scalekey each own distinct regions of the OPM register space:
+
+- **OPM Tone Editor** controls tone parameters —\
+  operator settings (TL, AR, DR, SR, RR, SL, MUL, DT1, DT2),\
+  algorithm and feedback (CON/FB), LFO, pan, and related registers.
+
+- **scalekey** controls note and playback —\
+  key on/off (register $08) and note/octave (registers $28–$2F).
+
+Neither process writes to the other's register domain.
+
+This is not enforced by a lock or protocol.\
+It is a design agreement — a boundary defined at the architecture level.
+
+The result is that OPM Tone Editor can update tone parameters freely,\
+without concern for scalekey's playback state.\
+scalekey can trigger notes freely,\
+without concern for OPM Tone Editor's parameter editing state.
+
+Each can be developed and extended independently,\
+because the hardware boundary between them is clear.
+
 ---
 
 ## Keyboard and MIDI: A Unified Path
