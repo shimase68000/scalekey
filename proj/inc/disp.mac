@@ -1,0 +1,7 @@
+;
+;  disp.mac
+;
+
+CORRECT_OPM_NOTE     .equ 3   ; OPM Clock: 3.58MHz => 4MHz
+MIDIIN_DISP_COUNT    .equ 17
+

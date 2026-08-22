@@ -1,0 +1,18 @@
+;
+;  scalekey.mac
+;
+
+; exit code
+EXITCODE_NORMAL	       .equ 0
+EXITCODE_KEEPPR	       .equ 1
+EXITCODE_KILL_PROC     .equ 2
+EXITCODE_ALREADY_EXIST .equ 3
+
+; input enable bit
+INPUT_ENABLE_KEYBOARD  .equ 0
+INPUT_ENABLE_MIDI      .equ 1
+
+; oct up/down
+SCALEKEY_OCT_UP        .equ 12
+SCALEKEY_OCT_DOWN      .equ -12
+

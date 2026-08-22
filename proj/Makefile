@@ -157,7 +157,7 @@ $(XOBJDIR)/%.o: $(SRCDIR_S)/%.s | $(XOBJDIR)
 #$(OBJDIR)/%_elf.o: $(XOBJDIR)/%.o | $(OBJDIR)
 #	x68k2elf.py -v $< $@
 
-# Link (produces oe.x and oe.x.elf)
+# Link
 #$(PROJ).r: $(OBJS) $(ELF_ASM_OBJS)
 #	$(LK) -o $@ $^ $(LDLIBS) $(LDFLAGS)
 $(PROJ).r: $(OBJS) $(X68K_ASM_OBJS)
@@ -165,12 +165,6 @@ $(PROJ).r: $(OBJS) $(X68K_ASM_OBJS)
 	@echo -e "\033[32m"
 	ls -la $@
 	@echo -e "\033[0m"
-
-#$(XOBJDIR)/scalekey.o: $(USRINC_S)/scalekey.mac $(USRINC_S)/title.mac
-#$(XOBJDIR)/midi.o:     $(USRINC_S)/scalekey.mac
-#$(XOBJDIR)/trap7.o:    $(USRINC_S)/title.mac
-#$(XOBJDIR)/keyonoff.o: $(SRCDIR_S)/keyonoff.s
-#	$(AS) $(ASFLAGS) $< -o $@ -p | iconv -f CP932 -t UTF-8
 
 #
 $(X68K_ASM_OBJS): $(X68K_INCS)

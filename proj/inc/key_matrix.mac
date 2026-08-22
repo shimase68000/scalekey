@@ -1,0 +1,49 @@
+;
+;  key_matrix.mac
+;
+;  scalekey key matrix data - one longword per key, 0 terminates.
+;
+;    [31:24] bitsns group number (0-15)
+;    [23:16] bitsns bit mask
+;    [15:8]  note number (0-95, o4 c = 0)
+;    [7:0]   ASCII code of the key. Documentation only - the code
+;            never reads it. It also keeps every entry non-zero,
+;            which the table terminator test relies on.
+;
+;  The upper word [31:16] doubles as the key identity: it is stored in
+;  channel_use and matched by note_keyoff. Keyboard entries therefore
+;  carry $00-$0F in bit31-24, while MIDI entries carry $90 (midi.s),
+;  so the two cannot collide.
+;
+
+; scalekey key matrix data
+SCALEKEY_O4C   .equ  $05040000 | 'z'     ; 'z'
+SCALEKEY_O4C_  .equ  $03800100 | 's'     ; 's'
+SCALEKEY_O4D   .equ  $05080200 | 'x'     ; 'x'
+SCALEKEY_O4D_  .equ  $04010300 | 'd'     ; 'd'
+SCALEKEY_O4E   .equ  $05100400 | 'c'     ; 'c'
+SCALEKEY_O4F   .equ  $05200500 | 'v'     ; 'v'
+SCALEKEY_O4F_  .equ  $04040600 | 'g'     ; 'g'
+SCALEKEY_O4G   .equ  $05400700 | 'b'     ; 'b'
+SCALEKEY_O4G_  .equ  $04080800 | 'h'     ; 'h'
+SCALEKEY_O4A   .equ  $05800900 | 'n'     ; 'n'
+SCALEKEY_O4A_  .equ  $04100A00 | 'j'     ; 'j'
+SCALEKEY_O4B   .equ  $06010B00 | 'm'     ; 'm'
+
+SCALEKEY_O5CX  .equ  $06020C00 | ','     ; ','  additional
+
+SCALEKEY_O5C   .equ  $02020C00 | 'q'     ; 'q'
+SCALEKEY_O5C_  .equ  $00080D00 | '2'     ; '2'
+SCALEKEY_O5D   .equ  $02040E00 | 'w'     ; 'w'
+SCALEKEY_O5D_  .equ  $00100F00 | '3'     ; '3'
+SCALEKEY_O5E   .equ  $02081000 | 'e'     ; 'e'
+SCALEKEY_O5F   .equ  $02101100 | 'r'     ; 'r'
+SCALEKEY_O5F_  .equ  $00401200 | '5'     ; '5'
+SCALEKEY_O5G   .equ  $02201300 | 't'     ; 't'
+SCALEKEY_O5G_  .equ  $00801400 | '6'     ; '6'
+SCALEKEY_O5A   .equ  $02401500 | 'y'     ; 'y'
+SCALEKEY_O5A_  .equ  $01011600 | '7'     ; '7'
+SCALEKEY_O5B   .equ  $02801700 | 'u'     ; 'u'
+
+SCALEKEY_O6CX  .equ  $03011800 | 'i'     ; 'i'  additional
+

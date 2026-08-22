@@ -1,0 +1,21 @@
+;
+;  title.mac
+;
+
+; MARKER_VERSION is the single source of the version number: it is both
+; what the title line shows and what SCALEKEY_VERSION (trap7.s
+; marker_version) reports to the caller.
+MARKER_VERSION   .reg   '1.10'
+TITLE_VERSION	 .reg	MARKER_VERSION
+
+; empty for a release build; set a marker for test builds
+;TITLE_SUBVERSION .reg   'a-2026.08.04'
+TITLE_SUBVERSION .reg   ''
+TITLE_PROGNAME	 .reg	'SCALEKEY'
+TITLE_COPYRIGHT	 .reg	'Copyright 2025-26 UG.'
+
+M_VER24          .reg   ((MARKER_VERSION.shr.24).and.$FF)
+M_VER16          .reg   ((MARKER_VERSION.shr.16).and.$FF)
+M_VER8           .reg   ((MARKER_VERSION.shr.8).and.$FF)
+M_VER0           .reg   ((MARKER_VERSION.shr.0).and.$FF)
+SCALEKEY_VERSION .reg   (M_VER24.shl.24).or.(M_VER16.shl.16).or.(M_VER8.shl.8).or.(M_VER0.shl.0)
