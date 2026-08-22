@@ -1,86 +1,115 @@
 # scalekey
 
-Real-time keyboard and MIDI input with tone control for X68000
+[English](README.md) | [日本語](README.ja.md)
+
+scalekey is a resident performance module for the YM2151 (OPM) that runs on
+Human68k on the X68000.
+It provides host applications with the ability to play the OPM from the X68000
+keyboard or a MIDI keyboard.
 
 ---
 
 ## Overview
 
-scalekey is a real-time input and tone control tool for the Sharp X68000.
+scalekey stays resident and takes care of **driving the OPM**.
 
-It is designed to receive input from both keyboard and MIDI,
-and trigger tone generation in real time.
+A host application asks scalekey to play, and scalekey handles key input,
+channel assignment, and the OPM registers.
+Because scalekey takes care of playback, the host can concentrate on its own work.
 
-This tool is primarily used together with **OPM Tone Editor 'N'**,
-where it serves as a real-time input and playback component.
-
----
-
-## Features
-
-* Real-time keyboard input
-* Real-time MIDI input
-* Tone trigger and control
-* Designed for low-latency operation
-* Intended for integration with other tools
+v1.10 extends the performance features.
+**Unison, delay, and detune** were added, so a single note can now be sounded
+across several OPM channels.
+The channel assignment methods were also extended, and **Slotmask** is now
+supported.
 
 ---
 
-## Design Concept
+## Key Features
 
-scalekey separates input handling and tone control from the editor.
-
-* Editor (Tone Editor) handles parameter editing
-* scalekey handles real-time input and playback
-
-This separation allows:
-
-- simpler editor design
-- reusable input/control logic
-- flexible system configuration
-- more efficient debugging
-- easier extension of functionality
+- **Play the OPM from the X68000 keyboard** (two octaves plus octave shift)
+- **Play the OPM from MIDI IN** (MIDI board required)
+- **Unison (0–8 voices)**, **delay**, and **per-channel detune**
+- **Select the OPM channels used for playing**, and specify the **assign start channel**
+- **Channel assignment method** — Sequential / RoundRobin, each with Hold / Over
+- **Slotmask** — specify which operators are keyed on
+- **MIDI channel filter** — OFF / Any / Ch.1–16
+- **On-screen display** of channel state and the note being played
+- **Resident and removable** from the command line
 
 ---
 
-## Current Status
+## System Structure
 
-This project is under active development.
+scalekey is the performance half of a two-part system.
 
-The source code is not included at this time due to ongoing refactoring and cleanup,
-particularly around MIDI I/O implementation.
+- The **host** decides what to play and owns the tone data.
+- **scalekey** owns key input, channel assignment, and the OPM registers.
 
-The repository currently provides documentation, including a rationale describing the design.
+The two communicate through a TRAP #7 interface. scalekey is written so that any
+host can drive it, but at present the only host is
+**[OPM Tone Editor 'Ｎ'](https://github.com/shimase68000/opm-tone-editor-n)**.
 
----
+The TRAP #7 interface is not documented here, since it may still change.
+If you want to drive scalekey yourself, see `proj/src/trap7.s`.
 
-## Future Direction
-
-Future extensions may include real-time recording and playback capabilities.
-
----
-
-## Relationship with OPM Tone Editor
-
-scalekey is designed to work with:
-
-OPM Tone Editor 'N'
-
-* Tone Editor: editing and data management
-* scalekey: real-time input and tone triggering
-
-Together, they form a modular FM sound system.
+> A single scalekey cannot be used from more than one host at the same time.
+> The host that claims it first keeps it until it exits.
 
 ---
 
-## Notes on MIDI
+## Usage
 
-MIDI functionality is part of the design, but the current implementation is being reviewed.
+```
+usage: scalekey [switch]
+switch:  -r  remove the resident copy
+         -s  quiet mode
+```
 
-The MIDI I/O layer will be reimplemented in a clean and well-defined form.
+Running `scalekey` with no switch makes it resident.
+Running `scalekey -r` removes it.
+
+When used with OPM Tone Editor 'Ｎ', you normally do not need to run scalekey by
+hand — the editor loads and unloads it
+(`scalekey.load_on_startup` / `unload_on_exit` in `oe.jsn`).
+
+---
+
+## Requirements
+
+- X68000 running Human68k
+- A MIDI board is required for MIDI input.
+  Keyboard performance works without one.
+
+Verified on an X68000 emulator environment.
+
+---
+
+## Installation
+
+Download the distribution archive from Releases and extract it to any location.
+
+- [Releases](../../releases)
+
+To use it with OPM Tone Editor 'Ｎ', place `scalekey.r` somewhere on your `PATH`.
+
+- [OPM Tone Editor 'Ｎ'](https://github.com/shimase68000/opm-tone-editor-n) / [OPM Tone Editor 'Ｎ' Releases](https://github.com/shimase68000/opm-tone-editor-n/releases)
+
+OPM Tone Editor 'Ｎ' v1.20 works with scalekey v1.10 or later.
+
+---
+
+## Source Code
+
+The `proj/` directory contains the source code (`inc/`, `src/`, `Makefile`).
+It is published as a reference; a detailed build environment guide is not
+currently provided.
+For normal use, please use the distribution archive from Releases.
 
 ---
 
 ## License
 
-MIT License
+This project is released under the MIT License.
+
+Copyright (c) 2025-2026 UG.
