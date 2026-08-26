@@ -23,6 +23,9 @@ across several OPM channels.
 The channel assignment methods were also extended, and **Slotmask** is now
 supported.
 
+v1.11 adds a mode in which the MIDI interface (YM3802) is left untouched,
+so scalekey can run alongside a sound driver that supports MIDI output.
+
 ---
 
 ## Key Features
@@ -36,6 +39,8 @@ supported.
 - **MIDI channel filter** — OFF / Any / Ch.1–16
 - **On-screen display** of channel state and the note being played
 - **Resident and removable** from the command line
+- **A mode that leaves the MIDI interface untouched** (`-n`), for running
+  alongside an external sound driver
 
 ---
 
@@ -64,10 +69,16 @@ If you want to drive scalekey yourself, see `proj/src/trap7.s`.
 usage: scalekey [switch]
 switch:  -r  remove the resident copy
          -s  quiet mode
+         -n  do not initialize MIDI
 ```
 
 Running `scalekey` with no switch makes it resident.
 Running `scalekey -r` removes it.
+
+With `-n`, scalekey does not initialise the MIDI interface (YM3802).
+Use it when a sound driver that supports MIDI output is kept resident.
+In this mode, playing via MIDI input is not available (keyboard performance
+still works).
 
 When used with OPM Tone Editor 'Ｎ', you normally do not need to run scalekey by
 hand — the editor loads and unloads it
@@ -95,7 +106,9 @@ To use it with OPM Tone Editor 'Ｎ', place `scalekey.r` somewhere on your `PATH
 
 - [OPM Tone Editor 'Ｎ'](https://github.com/shimase68000/opm-tone-editor-n) / [OPM Tone Editor 'Ｎ' Releases](https://github.com/shimase68000/opm-tone-editor-n/releases)
 
-OPM Tone Editor 'Ｎ' v1.20 works with scalekey v1.10 or later.
+OPM Tone Editor 'Ｎ' v1.21 works with scalekey v1.10 or later.
+Using the editor-side equivalent of `-n` (`scalekey.midi_enable`) requires
+scalekey v1.11 or later.
 
 ---
 

@@ -19,6 +19,9 @@ v1.10 では演奏機能を拡張しました。
 **ユニゾン・ディレイ・ディチューン**を追加し、1 つのノートを複数の OPM チャンネルで鳴らせるようになりました。
 あわせて、OPM チャンネルへのアサイン方式を拡張し、**Slotmask** にも対応しました。
 
+v1.11 では、MIDI I/F（YM3802）に触らないモードを追加しました。
+MIDI 出力をサポートするサウンドドライバとの併用が可能です。
+
 ---
 
 ## Key Features
@@ -32,6 +35,7 @@ v1.10 では演奏機能を拡張しました。
 - **MIDI チャンネルフィルタ** … OFF / Any / Ch.1～16
 - **チャンネルの状態と発音中のノートを画面に表示**
 - **コマンドラインから常駐・解除**
+- **MIDI I/F に触らないモード**（`-n`）… 外部サウンドドライバとの併用に
 
 ---
 
@@ -60,10 +64,15 @@ scalekey の制御に関しては、`proj/src/trap7.s` をご覧ください。
 usage: scalekey [switch]
 switch:  -r  常駐解除
          -s  非表示モード
+         -n  MIDI を初期化しない
 ```
 
 スイッチなしで `scalekey` を実行すると常駐します。
 `scalekey -r` で常駐を解除します。
+
+`-n` を指定すると、scalekey は MIDI I/F（YM3802）を初期化しません。
+MIDI 出力をサポートするサウンドドライバを常駐させたまま使う場合に指定します。
+この場合、MIDI 入力による演奏はできません（キーボード演奏は可能です）。
 
 OPM Tone Editor 'Ｎ' と組み合わせて使う場合、通常は手動で実行する必要はありません。
 エディタが scalekey の常駐・解除を行います
@@ -91,7 +100,9 @@ OPM Tone Editor 'Ｎ' と組み合わせて使う場合は、
 
 - [OPM Tone Editor 'Ｎ'](https://github.com/shimase68000/opm-tone-editor-n) / [Releases](https://github.com/shimase68000/opm-tone-editor-n/releases)
 
-OPM Tone Editor 'Ｎ' v1.20 は scalekey v1.10 以降と組み合わせて動作します。
+OPM Tone Editor 'Ｎ' v1.21 は scalekey v1.10 以降と組み合わせて動作します。
+Tone Editor 側から `-n` 相当の設定（`scalekey.midi_enable`）を使う場合は
+scalekey v1.11 以降が必要です。
 
 ---
 
