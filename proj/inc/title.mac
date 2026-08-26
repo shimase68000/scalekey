@@ -5,7 +5,7 @@
 ; MARKER_VERSION is the single source of the version number: it is both
 ; what the title line shows and what SCALEKEY_VERSION (trap7.s
 ; marker_version) reports to the caller.
-MARKER_VERSION   .reg   '1.10'
+MARKER_VERSION   .reg   '1.11'
 TITLE_VERSION	 .reg	MARKER_VERSION
 
 ; empty for a release build; set a marker for test builds
