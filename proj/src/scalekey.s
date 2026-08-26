@@ -388,6 +388,7 @@ str_usage:
 	.dc.b	'usage: scalekey [switch]',13,10
 	.dc.b	'switch:  -r  常駐解除',13,10
 	.dc.b   '         -s  非表示モード',13,10
+	.dc.b   '         -n  MIDI を初期化しない',13,10
 	.dc.b	0
 
 ;----------------------------------

@@ -33,6 +33,7 @@
 	.xref	poly_count
 	.xref	midi_channel_filter
 	.xref	midi_board_not_arrive
+	.xref	midi_enable_flag
 	.xref	midi_note_keyoff_all
 
 	.xref	restore_mcsvector
@@ -104,6 +105,7 @@ proc_table:
 	.dc.w	routine18-proc_table	; 18: set opmreg_access_permission
 	.dc.w	routine19-proc_table	; 19: get exec path
 	.dc.w	routine20-proc_table	; 20: mark of master
+	.dc.w	routine21-proc_table	; 21: get MIDI enable status
 
 end_of_proc_table:
 
@@ -461,6 +463,22 @@ routine20:
 
 ;--- exit
 3:
+	rts
+
+;----------------------------------
+; 21: get MIDI enable status
+;  => d0.l: 0 = MIDI disabled (started with -n)
+;           1 = MIDI enabled
+;
+;  Note : "disabled" means the YM3802 was never touched, so an external
+;         sound driver keeps its own MIDI interrupt setup. This is fixed
+;         at startup and cannot be changed afterwards.
+;         Added in v1.11 - older versions reject this function number.
+;----------------------------------
+routine21:
+	moveq.l	#0,d0
+	lea		midi_enable_flag(pc),a1
+	move.w	(a1),d0
 	rts
 
 ;----------------------------------

@@ -16,6 +16,8 @@
 
 ;----------------------------------
 
+	.xref	midi_enable_flag
+
 	.xref	note_keyon
 	.xref	note_keyoff
 	.xref	keyin_enable
@@ -31,15 +33,26 @@
 
 ;----------------------------------
 
-; MIDI note -> OPM note. MIDI note 72 (C5) maps to 0, so lower notes
-; go negative here. opmset sign-extends (ext.w d5) and adds note_offset
+; MIDI note -> OPM note. MIDI note 72 (C5) maps to 0, so lowe
+; go negative here. opmset sign-extends (ext.w d5) and adds n
 ; (default 45), which brings them back into range.
 CORRECT_MIDI_NOTE	.equ	-(12*6)
 
 ;----------------------------------
+; init_midi
+;   With -n (midi_enable_flag = 0) the YM3802 is left completely alone:
+;   mcs_check is skipped too, since it temporarily replaces the bus error
+;   vector and must not run while an external driver owns the hardware.
+;   The result is reported as "no MIDI board", which disables every MIDI
+;   path from there on.
 init_midi:
 	lea		midi_buffer(pc),a0	; clear midi_buffer
 	clr.l	(a0)
+
+	moveq.l	#-1,d0				; assume "no MIDI board"
+	lea		midi_enable_flag(pc),a0
+	tst.w	(a0)
+	beq		@f					; -n : do not touch the YM3802
 
 	bsr		mcs_check			; check MIDI board
 	tst.l	d0
@@ -162,14 +175,14 @@ midi_channel_filter:
 midi_buffer:
 	.ds.l	1
 
-; disp.s reads the channel as midiin_disp_count+2 (midiin_disp_channel
-; is not exported), so the two must stay adjacent in this order.
+; disp.s reads the channel as midiin_disp_count+2 (midiin_dis
+; is not exported), so the two must stay adjacent in this ord
 ;   count bit15 : disp request flag
 ;   count bit14-0: remaining display frames
-;   channel      : 0-15, or $ff when there is no channel to show
+;   channel      : 0-15, or $ff when there is no channel to s
 midiin_disp_count:
 	.dc.w	0
 
 midiin_disp_channel:
 	.dc.b	0
-	.dc.b	0		; padding (.even)
+	.dc.b	0

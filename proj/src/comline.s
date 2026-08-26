@@ -13,6 +13,7 @@
 	.xdef	print_usage_flag
 	.xdef	print_title_enable
 	.xdef	kill_proc_flag
+	.xdef	midi_enable_flag
 
 ;----------------------------------
 parse_comline:
@@ -64,7 +65,9 @@ parse_sub_loop:
 	beq		switch_s
 	cmpi.b	#'r',d0			; 'r': unload TSR process
 	beq		switch_r
-; anything other than 's' / 'r' after '/' or '-' lands here
+	cmpi.b	#'n',d0			; 'n': do not initialize MIDI
+	beq		switch_n
+; anything other than 's' / 'r' / 'n' after '/' or '-' lands here
 switch_usage:
 	lea		print_usage_flag(pc),a1
 	move.w	#1,(a1)
@@ -80,6 +83,11 @@ switch_s:
 	move.w	#0,(a1)
 	bra		parse_sub_loop
 
+switch_n:
+	lea		midi_enable_flag(pc),a1
+	move.w	#0,(a1)
+	bra		parse_sub_loop
+
 ;----------------------------------
 print_usage_flag:			; switch other
 	.dc.w	0
@@ -89,4 +97,10 @@ print_title_enable:			; switch 's'
 
 kill_proc_flag:				; switch 'r'
 	.dc.w	0
+
+; switch 'n' clears this. When 0, scalekey never touches the YM3802:
+; no mcs_check, no mcs_init, no interrupt vector. That lets an external
+; sound driver keep its own MIDI interrupt setup.
+midi_enable_flag:			; switch 'n'
+	.dc.w	1
 
