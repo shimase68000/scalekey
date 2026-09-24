@@ -126,7 +126,7 @@ TRAP #7 was chosen as an available trap vector\
 that does not conflict with sound drivers or other resident tools\
 commonly used in X68000 music environments.
 
-The interface provides 15 entry points (routine0–14) through which\
+The interface provides 22 entry points (routine0–21) through which\
 a master tool configures and controls scalekey at runtime:
 
 - Process management (TSR exit, main loop address)
@@ -143,7 +143,7 @@ during its initialization sequence without a dedicated version check call.
 The range check in the TRAP #7 handler:
 
 ```asm
-cmp.w   #NUM_OF_PROC,d0
+cmp.w   #PROC_NUM,d0
 bhi     trap7_exit      ; out of range → ignore
 ```
 
